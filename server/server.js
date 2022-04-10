@@ -1,11 +1,40 @@
 const express = require('express');
+
+// import Apollo Server
+const { ApolloServer } = require('apollo-server-express');
+
+// import typeDefs and resolvers
+const { typeDefs, resolvers } = require('./schemas/');
+
 const path = require('path');
+
 // importing the mongoose connection from config/connection.js
 const db = require('./config/connection');
 const routes = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// create a new Apollo server and pass in our schema data
+const startServer = async () => {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: authMiddleware,
+  });
+
+  // start Apollo Server
+  await server.start();
+
+  // integrate Apollo server with the Express app as middleware
+  server.applyMiddleware({ app });
+
+  // log where to go to test GQL API
+  console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+};
+
+// initialize the Apollo server
+startServer();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
