@@ -10,16 +10,19 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true
     },
     email: {
       type: String,
       required: true,
       unique: true,
       match: [/.+@.+\..+/, 'Must use a valid email address'],
+      // <string>@<string>.<string>
     },
     password: {
       type: String,
       required: true,
+      minlength: 8
     },
     // set savedBooks to be an array of data that adheres to the bookSchema
     savedBooks: [bookSchema],
@@ -33,7 +36,10 @@ const userSchema = new Schema(
 );
 
 // hash user password
+// set up pre-save middleware to create password
+// hashing password with Mongoose
 userSchema.pre('save', async function (next) {
+  // check to see if the data is new or if the password has been modified
   if (this.isNew || this.isModified('password')) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
