@@ -8,6 +8,9 @@ const { typeDefs, resolvers } = require('./schemas/');
 
 const path = require('path');
 
+// Auth Middleware
+const { authMiddleware } = require('./utils/auth')
+
 // importing the mongoose connection from config/connection.js
 const db = require('./config/connection');
 const routes = require('./routes');
@@ -20,7 +23,7 @@ const startServer = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    // context: authMiddleware,
+    context: authMiddleware
   });
 
   // start Apollo Server
