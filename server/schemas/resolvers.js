@@ -40,11 +40,21 @@ const resolvers = {
 
       // sign a token and return an object that combines the token with the user's data
       const token = signToken(user);
+      
       return { token, user };
     },
 
     // accepts a username, email, and pw as params; returns an Auth type
-    addUser: async () => {},
+    addUser: async (parent, args) => {
+
+        // Mongoose User model creates a new user in the database with whatever is passed in as the args
+        const user = await User.create(args);
+        
+        // sign a token and return an object that combines the token with the user's data
+        const token = signToken(user);
+
+        return { token, user };
+    },
 
     // accepts a book author's array, description, title, bookId, image, and link as parameters; returns a User type.
     saveBook: async () => {},
