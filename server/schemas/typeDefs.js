@@ -26,6 +26,7 @@ const typeDefs = gql`
     me: User
   }
 
+  # Auth type must return a token and can optionally include any other user data.
   type Auth {
     token: ID!
     user: User

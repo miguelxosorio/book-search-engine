@@ -31,6 +31,8 @@ module.exports = {
     // send to next endpoint
     next();
   },
+
+  // The signToken() function expects a user object and will add that user's username, email, and _id properties to the token.
   signToken: function ({ username, email, _id }) {
     const payload = { username, email, _id };
 
