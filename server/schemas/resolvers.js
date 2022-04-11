@@ -61,7 +61,7 @@ const resolvers = {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { savedBooks: bookData } },
-        // new: true, so the updated data comes back in query
+          // new: true, so the updated data comes back in query
           { new: true }
         );
         return updatedUser;
@@ -71,7 +71,19 @@ const resolvers = {
     },
 
     // Accepts a book's bookId as a parameter; returns a User type
-    removeBook: async () => {},
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+
+        return updatedUser;
+      }
+
+      throw new AuthenticationError('You need to be logged in');
+    },
   },
 };
 
