@@ -1,6 +1,11 @@
 import React from 'react';
 // Apollo import
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+
+// retrieve token from localStorage and include it with request to the API - every time make a GraphQL request
+import { setContext } from '@apollo/client/link/context';
+// setContext we can create a middleware function that will retrieve the token for us and combine it with existing httpLink
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
