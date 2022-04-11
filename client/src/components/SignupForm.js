@@ -34,11 +34,9 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser(userFormData);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      const { data } = await addUser({
+        variables: { ...userFormData },
+      });
 
       const { token, user } = await response.json();
       console.log(user);
