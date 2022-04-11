@@ -40,24 +40,35 @@ const resolvers = {
 
       // sign a token and return an object that combines the token with the user's data
       const token = signToken(user);
-      
+
       return { token, user };
     },
 
     // accepts a username, email, and pw as params; returns an Auth type
     addUser: async (parent, args) => {
+      // Mongoose User model creates a new user in the database with whatever is passed in as the args
+      const user = await User.create(args);
 
-        // Mongoose User model creates a new user in the database with whatever is passed in as the args
-        const user = await User.create(args);
-        
-        // sign a token and return an object that combines the token with the user's data
-        const token = signToken(user);
+      // sign a token and return an object that combines the token with the user's data
+      const token = signToken(user);
 
-        return { token, user };
+      return { token, user };
     },
 
     // accepts a book author's array, description, title, bookId, image, and link as parameters; returns a User type.
-    saveBook: async () => {},
+    saveBook: async (parent, { bookData }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $push: { savedBooks: bookData } },
+        // new: true, so the updated data comes back in query
+          { new: true }
+        );
+        return updatedUser;
+      }
+
+      throw new AuthenticationError('You need to be logged in');
+    },
 
     // Accepts a book's bookId as a parameter; returns a User type
     removeBook: async () => {},
@@ -65,7 +76,6 @@ const resolvers = {
 };
 
 module.exports = resolvers;
-
 
 /*
 A resolver can accept four arguments in the following order:
