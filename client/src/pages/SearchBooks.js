@@ -74,10 +74,17 @@ const SearchBooks = () => {
       return false;
     }
 
+    // use try/catch instead of promises to handle errors
     try {
-      const response = await saveBook(bookToSave, token);
+      // excecute saveBook mutation and pass in variable data from form
+      // will now pass the data from the form state object as variables for our saveBook mutation function
+      // Upon success, we destructure the data object from the response of our mutation and simply log it to see if we're getting the right data
+      const { data } = await saveBook({
+        variables: { bookData: { ...bookToSave } }
+      });
+      // console.log(data);
 
-      if (!response.ok) {
+      if (!data) {
         throw new Error('something went wrong!');
       }
 
