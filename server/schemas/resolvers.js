@@ -18,7 +18,19 @@ const resolvers = {
     },
   },
 
-  Mutation: {},
+  Mutation: {
+      // login accepts email and pw as params
+      login: async() => {},
+
+      // accepts a username, email, and pw as params; returns an Auth type
+      addUser: async() => {},
+
+      // accepts a book author's array, description, title, bookId, image, and link as parameters; returns a User type.
+      saveBook: async() => {},
+
+      // Accepts a book's bookId as a parameter; returns a User type
+      removeBook: async() => {}
+  },
 };
 
 module.exports = resolvers;
