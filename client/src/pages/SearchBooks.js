@@ -8,6 +8,9 @@ import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 // useMutation Hook
 import { useMutation } from '@apollo/client';
 
+// import SAVE_BOOK mutation
+import { SAVE_BOOK } from '../utils/mutations';
+
 const SearchBooks = () => {
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
@@ -16,6 +19,10 @@ const SearchBooks = () => {
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+  // the useMutation() Hook creates and prepares a JavaScript function that wraps around our mutation code and returns it to us
+  // In our case, it returns in the form of the saveBook function that's returned. We also get the ability to check for errors
+  const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
